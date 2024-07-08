@@ -12,10 +12,12 @@ main.attributes('-topmost', 1)
 main.wm_attributes('-transparentcolor', '#242424')
 main.overrideredirect(True)
 
-
 class SquadSoft():
     def __init__(self, window):
         self.window = window
+        self.main_canvas = CTkCanvas(self.window, width=main.winfo_screenwidth(), height=main.winfo_screenheight(), bg='#242424')
+        self.main_canvas.place(x=-2, y=-2)
+
         self.load_settings()
         self.gp_table()
         self.calculate_distance()
@@ -92,6 +94,7 @@ class SquadSoft():
     def calculate_distance(self):
         self.pix_distance = 0
         self.pnr_distance = 100
+
         def calculator(mode):
             self.click_count = 0
             x_coord = []
@@ -115,10 +118,12 @@ class SquadSoft():
                             pix_dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
                             real_dist = round(pix_dist / (self.pix_distance / self.pnr_distance))
                             def show_distance():
+                                line = self.main_canvas.create_line(x1, y1, x2, y2, width=4, fill=self.settings['text_color'])
                                 distanceL = CTkLabel(self.window, text=f'{real_dist}м', font=('Arial Black', 15),text_color=self.settings['text_color'], fg_color='#242424')
                                 distanceL.place(x=x2, y=y2+5)
-                                sleep(1)
+                                sleep(1.25)
                                 distanceL.destroy()
+                                self.main_canvas.delete(line)
                             Thread(target=show_distance).start()
             listener = mouse.Listener(on_click=on_click)
             listener.start()
@@ -132,14 +137,13 @@ class SquadSoft():
                 self.pnr_distance = 100
             def show_distance():
                 distanceL = CTkLabel(self.window, text=f'{self.pnr_distance}м', font=('Arial Black', 25), text_color=self.settings['text_color'], fg_color='#242424')
-                distanceL.place(x=main.winfo_screenwidth() // 2, y=main.winfo_screenheight() // 2)
+                distanceL.place(relx=0.5, rely=0.5)
                 sleep(1)
                 distanceL.destroy()
             Thread(target=show_distance).start()
         add_hotkey(self.settings['distance_start'], lambda: calculator('start'))
         add_hotkey(self.settings['distance_calculate'], lambda: calculator('real'))
         add_hotkey(self.settings['distance_start_switch'], switch_distance)
-
 
 if __name__ == '__main__':
     app = SquadSoft(main)
