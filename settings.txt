@@ -1,0 +1,11 @@
+#keybind - https://github.com/boppreh/keyboard?tab=readme-ov-file#api
+window_leave=f1
+gp_switch=f2
+gp_weapon_switch=f3
+
+distance_start=f5
+distance_calculate=f6
+distance_start_switch=right shift
+
+#etc
+text_color=#000000
