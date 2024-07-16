@@ -207,26 +207,30 @@ class SquadSoft():
         add_hotkey(self.settings['distance_start'], lambda: calculator('start'))
         add_hotkey(self.settings['distance_calculate'], lambda: calculator('real'))
         add_hotkey(self.settings['distance_start_switch'], switch_distance)
+        
     def zoom(self):
         self.zoom_flag = False
         self.zoom_state = True
         self.zoom_m = 2
+        def img_zoom(img, zoom):
+            w, h = img.size
+            zoom2 = zoom * 2
+            img = img.crop((960 - w / zoom2, 540 - h / zoom2,
+                            960 + w / zoom2, 540 + h / zoom2))
+            return img
         def zoomF():
             self.zoom_flag = True
-            def img_zoom(img, zoom):
-                w, h = img.size
-                zoom2 = zoom * 2
-                img = img.crop((960 - w / zoom2, 540 - h / zoom2,
-                                960 + w / zoom2, 540 + h / zoom2))
-                return img
-            im = img_zoom(screenshot(), self.zoom_m)
-            imT = CTkImage(im, size=(600,600))
-            self.zoomL = CTkLabel(self.window, image=imT, text='')
-            self.zoomL.place(x=int(self.settings['zoom_position_x']), y=int(self.settings['zoom_position_y']))
-            while self.zoom_flag:
+            def update_image():
                 im = screenshot()
                 im = img_zoom(im, 12)
                 self.zoomL.configure(image=CTkImage(dark_image=im, size=(450, 300)))
+                self.window.after(16, update_image)
+
+            im = img_zoom(screenshot(), self.zoom_m)
+            imT = CTkImage(im, size=(600, 600))
+            self.zoomL = CTkLabel(self.window, image=imT, text='')
+            self.zoomL.place(x=int(self.settings['zoom_position_x']), y=int(self.settings['zoom_position_y']))
+            update_image()
         def zoom_switch():
             if self.zoom_state:
                 if self.zoom_flag:
