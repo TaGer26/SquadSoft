@@ -1,11 +1,18 @@
 #keybind - https://github.com/boppreh/keyboard?tab=readme-ov-file#api
 window_leave=f1
+menu_switch=insert
+
 gp_switch=f2
 gp_weapon_switch=f3
+gp_scale=0.9
 
 distance_start=f5
 distance_calculate=f6
 distance_start_switch=right shift
+
+zoom=delete
+zoom_position_x=1400
+zoom_position_y=100
 
 #etc
 text_color=#000000
