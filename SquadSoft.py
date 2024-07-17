@@ -219,14 +219,18 @@ class SquadSoft():
                 img = img.crop((960 - w / zoom2, 540 - h / zoom2,
                                 960 + w / zoom2, 540 + h / zoom2))
                 return img
-            im = img_zoom(screenshot(), self.zoom_m)
-            imT = CTkImage(im, size=(600,600))
+            im = screenshot()
+            im = img_zoom(im, self.zoom_m)
+            imT = CTkImage(im, size=(450,300))
             self.zoomL = CTkLabel(self.window, image=imT, text='')
             self.zoomL.place(x=int(self.settings['zoom_position_x']), y=int(self.settings['zoom_position_y']))
-            while self.zoom_flag:
+            def update_image():
                 im = screenshot()
-                im = img_zoom(im, 12)
-                self.zoomL.configure(image=CTkImage(dark_image=im, size=(450, 300)))
+                im = img_zoom(im, self.zoom_m)
+                imT = CTkImage(im, size=(450, 300))
+                self.zoomL.configure(image=imT)
+                self.window.after(1, update_image)
+            update_image()
         def zoom_switch():
             if self.zoom_state:
                 if self.zoom_flag:
