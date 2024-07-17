@@ -225,11 +225,12 @@ class SquadSoft():
             self.zoomL = CTkLabel(self.window, image=imT, text='')
             self.zoomL.place(x=int(self.settings['zoom_position_x']), y=int(self.settings['zoom_position_y']))
             def update_image():
-                im = screenshot()
-                im = img_zoom(im, self.zoom_m)
-                imT = CTkImage(im, size=(450, 300))
-                self.zoomL.configure(image=imT)
-                self.window.after(1, update_image)
+                if self.zoom_flag:
+                    im = screenshot()
+                    im = img_zoom(im, self.zoom_m)
+                    imT = CTkImage(im, size=(450, 300))
+                    self.zoomL.configure(image=imT)
+                    self.window.after(1, update_image)
             update_image()
         def zoom_switch():
             if self.zoom_state:
